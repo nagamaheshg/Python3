@@ -1,6 +1,20 @@
 # regular expression is used for search patterns
 import re
 
+urls = '''
+https://www.google.com
+http://coreyms.com
+https://youtube.com
+https://www.nasa.com
+'''
+
+
+
+emails = '''nagamaheshgatta@gmail.com
+g.nagamahesh62@gmail.com
+mahesh.gatta@gmail.com
+'''
+
 text_to_search = '''
 abcdefghijklmnopqrstuvwxyz
 ABCDEFGHIJKLMNOPQRSTUVWXYZ
@@ -21,9 +35,10 @@ coreyms.com
 
 
 Mr. Sacafer
-Mr. Smith
+Mr Smith
 Ms. Davis
 Mrs. Robinson
+Mr. T 
 
 cat
 mat
@@ -116,13 +131,13 @@ for match in matches:
 #         print(match)
     
 # between range[-]
-pattern = re.compile(r'[1-5]00[.-]\d\d\d[.-]\d\d\d\d')
-with open('data.txt', 'r', encoding='utf-8') as f:
-    contents = f.read()
-    matches = pattern.finditer(contents)
+# pattern = re.compile(r'[1-5]00[.-]\d\d\d[.-]\d\d\d\d')
+# with open('data.txt', 'r', encoding='utf-8') as f:
+#     contents = f.read()
+#     matches = pattern.finditer(contents)
     
-    for match in matches:
-        print(match)
+#     for match in matches:
+#         print(match)
 
 # ^if you mention carriot sign outside of character set the carrot match beginning of the string but with in a character set it's negate the set and it matches everything not matched character set 
 
@@ -134,3 +149,54 @@ for match in matches:
     print(match)
 
 # To match multiple characters at a time.
+
+pattern = re.compile(r'\d{3}.\d{3}.\d{4}')
+with open('data.txt', 'r', encoding='utf-8') as f:
+    contents = f.read()
+    matches = pattern.finditer(contents)
+    
+    for match in matches:
+        print(match)
+
+pattern = re.compile(r'Mr\.?\s[A-Z]\w*') #question mark match zero or one character # s for space
+# \w for any character # * zero or more character
+matches = pattern.finditer(text_to_search)
+
+for match in matches:
+    print(match)
+    
+#pattern = re.compile(r'M(r|s|rs)\.?\s[A-Z]\w*') # here we are using group character() and or character |
+pattern = re.compile(r'(Mr|Ms|Mrs)\.?\s[A-Z]\w*')
+matches = pattern.finditer(text_to_search)
+
+for match in matches:
+    print(match)
+
+#pattern = re.compile(r'[a-zA-Z]\w*\.?\w*@\w*\.[a-zA-Z]\w*')
+pattern = re.compile(r'[a-zA-Z.0-9-]+@[a-zA-Z-]+\.(com|edu|net)')
+matches = pattern.finditer(emails)
+
+for match in matches:
+    print(match)
+    
+### Sample Regex ###
+
+#[a-zA-Z0-9_.+-]+[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+
+
+# pattern = re.compile(r'[a-zA-Z]+[:](//)[a-zA-Z]*\.[a-zA-Z0-9]+\.[a-zA-Z0-9]+')
+pattern = re.compile(r'https?://(www\.)?(\w+)(\.\w+)')
+matches = pattern.finditer(urls)
+
+for match in matches:
+    print(match.group(2))
+
+# sub tution urls
+pattern = re.compile(r'https?://(www\.)?(\w+)(\.\w+)')
+subbed_urls = pattern.sub(r'\2\3', urls)
+print(subbed_urls)
+
+# ignore case flag.
+sentence = 'Start a sentence and then bring it to an end'
+pattern = re.compile(r'start', re.IGNORECASE)
+matches = pattern.search(sentence)
+print(matches)
